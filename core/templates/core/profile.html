@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4><i class="fas fa-user-edit"></i> Editar Perfil</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    {% if user.profile.avatar %}
+                        <img id="avatar-preview" src="{{ user.profile.avatar.url }}" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail">
+                    {% endif %}
+                    <h3 class="mt-2">{{ user.username }}</h3>
+                    <p class="text-muted">{{ user.email }}</p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="text-primary border-bottom pb-2">Información Personal</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Nombre de Usuario</label>
+                            {{ u_form.username }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Correo Electrónico</label>
+                            {{ u_form.email }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Nombre</label>
+                            {{ u_form.first_name }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Apellido</label>
+                            {{ u_form.last_name }}
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary border-bottom pb-2 mt-3">Datos Extra</h5>
+                    <div class="mb-3">
+                        <label>Teléfono</label>
+                        {{ p_form.telephone }}
+                    </div>
+                    <div class="mb-3">
+                        <label>Cambiar Foto de Perfil</label>
+                        {{ p_form.avatar }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Actualizar Información</button>
+                        <a href="{% url 'password_change' %}" class="btn btn-outline-danger">Cambiar Contraseña</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const avatarInput = document.getElementById('id_avatar');
+    const avatarPreview = document.getElementById('avatar-preview');
+
+    avatarInput.onchange = function(evt) {
+        const [file] = avatarInput.files;
+        if (file) {
+            avatarPreview.src = URL.createObjectURL(file);
+        }
+    };
+</script>
+{% endblock %}

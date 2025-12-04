@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuevo Dispositivo{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-microchip"></i> 
+                    {% if form.instance.pk %}
+                        Editar Dispositivo
+                    {% else %}
+                        Nuevo Dispositivo
+                    {% endif %}
+                </h4>            
+                </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %} <div class="mb-3">
+                        <label class="form-label fw-bold">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        <div class="text-danger small">{{ form.name.errors }}</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{{ form.category.label }}</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">{{ form.zone.label }}</label>
+                            {{ form.zone }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ form.model_number.label }}</label>
+                        {{ form.model_number }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'device_list' %}" class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Guardar Dispositivo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

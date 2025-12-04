@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Zonas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-map-marker-alt"></i> Gestión de Zonas</h2>
+    {% if perms.devices.add_zone %}
+        <a href="{% url 'zone_create' %}" class="btn btn-success"><i class="fas fa-plus"></i> Nueva Zona</a>
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for zone in zones %}
+                        <tr>
+                            <td>{{ zone.name }}</td>
+                            <td class="text-center">
+                            {% if perms.devices.change_zone %}
+                                <a href="{% url 'zone_update' zone.pk %}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                            {% endif %}  
+                            {% if perms.devices.delete_zone %}    
+                                <button onclick="eliminarZona({{ zone.pk }})" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No hay zonas registradas.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="alert alert-warning">
+            <h5><i class="fas fa-exclamation-triangle"></i> Cuidado</h5>
+            <p>Si eliminas una zona, todos los dispositivos ubicados en ella también serán eliminados del sistema.</p>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    function eliminarZona(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Se borrarán los dispositivos en esta zona!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/devices/zones/delete/" + id + "/";
+            }
+        })
+    }
+</script>
+{% endblock %}
+{% endblock %}
