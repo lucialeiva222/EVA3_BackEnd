@@ -20,13 +20,13 @@ class DeviceForm(forms.ModelForm):
             'model_number': 'Número de Serie / Modelo',
         }
 
-        def clean_name(self):
-            name = self.cleaned_data.get('name')
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
 
-            if Device.objects.filter(name__iexact=name).exclude(pk=self.instance.pk).exists():
-                raise forms.ValidationError("¡Ya existe un dispositivo registrado con este nombre!")
+        if Device.objects.filter(name__iexact=name).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("¡Ya existe un dispositivo registrado con este nombre!")
             
-            return name
+        return name
         
 class CategoryForm(forms.ModelForm):
     class Meta:
